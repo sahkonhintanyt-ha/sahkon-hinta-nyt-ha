@@ -1,0 +1,72 @@
+blueprint:
+  name: Sähkön hintailmoitus (Electricity price alert)
+  description: >
+    Sends a phone notification when the electricity price drops below or rises
+    above your chosen limit. Uses the free API from https://sähkönhintanyt.org
+    (install the package from this repository first).
+  domain: automation
+  source_url: https://github.com/sahkonhintanyt-ha/sahkon-hinta-nyt-ha/blob/main/blueprints/automation/sahkon-hinta-nyt/price_alert.yaml
+  homeassistant:
+    min_version: 2024.10.0
+  input:
+    price_sensor:
+      name: Price sensor
+      default: sensor.sahkon_hinta_nyt
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+    direction:
+      name: Alert when price is
+      default: below
+      selector:
+        select:
+          options:
+            - label: Below the limit (cheap)
+              value: below
+            - label: Above the limit (expensive)
+              value: above
+    limit:
+      name: Limit (snt/kWh)
+      default: 3
+      selector:
+        number:
+          min: -10
+          max: 100
+          step: 0.5
+          unit_of_measurement: snt/kWh
+    notify_device:
+      name: Phone (Home Assistant app)
+      selector:
+        device:
+          filter:
+            - integration: mobile_app
+
+mode: single
+max_exceeded: silent
+
+variables:
+  direction: !input direction
+
+triggers:
+  - trigger: numeric_state
+    entity_id: !input price_sensor
+    below: !input limit
+    id: below
+  - trigger: numeric_state
+    entity_id: !input price_sensor
+    above: !input limit
+    id: above
+
+conditions:
+  - condition: template
+    value_template: "{{ trigger.id == direction }}"
+
+actions:
+  - domain: mobile_app
+    type: notify
+    device_id: !input notify_device
+    title: "⚡ Sähkön hinta"
+    message: >-
+      Hinta on nyt {{ trigger.to_state.state }} snt/kWh
+      ({{ 'alle' if direction == 'below' else 'yli' }} rajan).

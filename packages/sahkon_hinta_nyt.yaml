@@ -1,0 +1,33 @@
+# Sähkön hinta nyt – Home Assistant package
+# Data: https://sähkönhintanyt.org (ENTSO-E / Nord Pool day-ahead)
+# Free API, no API key needed. Prices include VAT 25.5 %.
+
+rest:
+  - resource: https://api.xn--shknhintanyt-gcb8w.org/v1/ha?zone=FI
+    scan_interval: 300
+    sensor:
+      - name: "Sähkön hinta nyt"
+        unique_id: sahkon_hinta_nyt
+        unit_of_measurement: "snt/kWh"
+        state_class: measurement
+        icon: mdi:flash
+        value_template: "{{ value_json.state }}"
+        json_attributes_path: "$.attributes"
+        json_attributes:
+          - level
+          - min
+          - max
+          - average
+          - cheapest_3h_start
+          - cheapest_3h_avg
+          - tomorrow_valid
+          - raw_today
+          - raw_tomorrow
+
+  - resource: https://api.xn--shknhintanyt-gcb8w.org/v1/is-cheap?zone=FI&hours=4
+    scan_interval: 300
+    binary_sensor:
+      - name: "Sähkö halpaa"
+        unique_id: sahko_halpaa
+        icon: mdi:piggy-bank
+        value_template: "{{ value_json.cheap }}"

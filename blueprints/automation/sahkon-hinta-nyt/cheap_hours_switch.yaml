@@ -1,0 +1,62 @@
+blueprint:
+  name: Sähkö halpaa → kytke laite päälle (Cheapest hours → turn on device)
+  description: >
+    Turns a device on during the cheapest electricity hours of the day and off
+    otherwise. Ideal for water heaters, EV charging and floor heating.
+    Uses the free API from https://sähkönhintanyt.org
+    (install the package from this repository first).
+  domain: automation
+  source_url: https://github.com/sahkonhintanyt-ha/sahkon-hinta-nyt-ha/blob/main/blueprints/automation/sahkon-hinta-nyt/cheap_hours_switch.yaml
+  homeassistant:
+    min_version: 2024.10.0
+  input:
+    cheap_sensor:
+      name: Cheap-hours sensor
+      description: Binary sensor that is on during the cheapest hours.
+      default: binary_sensor.sahko_halpaa
+      selector:
+        entity:
+          filter:
+            - domain: binary_sensor
+    target_device:
+      name: Device to control
+      description: Switch, light or input_boolean to turn on and off.
+      selector:
+        entity:
+          filter:
+            - domain:
+                - switch
+                - light
+                - input_boolean
+
+mode: restart
+
+variables:
+  cheap: !input cheap_sensor
+
+triggers:
+  - trigger: state
+    entity_id: !input cheap_sensor
+    to:
+      - "on"
+      - "off"
+  - trigger: homeassistant
+    event: start
+
+conditions:
+  - condition: template
+    value_template: "{{ states(cheap) in ['on', 'off'] }}"
+
+actions:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ is_state(cheap, 'on') }}"
+        sequence:
+          - action: homeassistant.turn_on
+            target:
+              entity_id: !input target_device
+    default:
+      - action: homeassistant.turn_off
+        target:
+          entity_id: !input target_device
