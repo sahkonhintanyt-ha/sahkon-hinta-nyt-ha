@@ -4,7 +4,7 @@
  * Works with sensor.sahkon_hinta_nyt from the sahkon-hinta-nyt-ha package.
  * License: MIT
  */
-const SHN_VERSION = "1.1.0";
+const SHN_VERSION = "1.1.1";
 const SHN_PREFIX = "shn_";
 
 const LEVELS = [
@@ -31,6 +31,7 @@ class SahkonHintaCard extends HTMLElement {
       thresholds: [5, 10, 15],
       show_source: true,
       show_actions: true,
+      time_zone: "Europe/Helsinki",
       ...config,
     };
     this._day = this._day || "today";
@@ -81,7 +82,8 @@ class SahkonHintaCard extends HTMLElement {
   }
 
   _tz() {
-    return (this._hass && this._hass.config && this._hass.config.time_zone) || "Europe/Helsinki";
+    // Prices follow the Finnish day, so show Finnish time unless configured otherwise.
+    return this._config.time_zone || (this._hass && this._hass.config && this._hass.config.time_zone) || "Europe/Helsinki";
   }
 
   _num(v) {
@@ -157,7 +159,7 @@ class SahkonHintaCard extends HTMLElement {
 
   _chart(slots, now) {
     if (!slots || !slots.length) {
-      return `<div class="empty">Huomisen hinnat julkaistaan yleensä noin klo 14.</div>`;
+      return `<div class="empty">Huomisen hinnat julkaistaan yleensä noin klo 14.15 Suomen aikaa.<br>Tarkista hetken kuluttua uudelleen.</div>`;
     }
     const W = 300, H = 120, PAD_T = 6, PAD_B = 4;
     const vals = slots.map((s) => Number(s.value));
@@ -221,16 +223,18 @@ class SahkonHintaCard extends HTMLElement {
     const lvl = isNaN(price) ? null : this._level(price);
     const now = Date.now();
     const hasTomorrow = a.tomorrow_valid === true && Array.isArray(a.raw_tomorrow) && a.raw_tomorrow.length;
-    if (this._day === "tomorrow" && !hasTomorrow) this._day = "today";
     const slots = (this._day === "today" ? a.raw_today : a.raw_tomorrow) || [];
     const vals = slots.map((s) => Number(s.value));
-    const dayMin = vals.length ? Math.min(...vals) : a.min;
-    const dayMax = vals.length ? Math.max(...vals) : a.max;
-    const dayAvg = vals.length ? vals.reduce((x, y) => x + y, 0) / vals.length : a.average;
+    const noData = this._day === "tomorrow" && !hasTomorrow;
+    const dayMin = vals.length ? Math.min(...vals) : noData ? null : a.min;
+    const dayMax = vals.length ? Math.max(...vals) : noData ? null : a.max;
+    const dayAvg = vals.length ? vals.reduce((x, y) => x + y, 0) / vals.length : noData ? null : a.average;
     this._slots = slots;
 
     let readout = "&nbsp;";
-    if (this._day === "today" && a.cheapest_3h_start) {
+    if (this._day === "tomorrow" && !hasTomorrow) {
+      readout = "Huomisen hinnat eivät ole vielä saatavilla.";
+    } else if (this._day === "today" && a.cheapest_3h_start) {
       const s = new Date(a.cheapest_3h_start);
       const e = new Date(s.getTime() + 3 * 3600 * 1000);
       readout = `Halvin 3 h: klo ${this._time(s)}–${this._time(e)}, keskimäärin <b>${this._num(a.cheapest_3h_avg)}</b> snt`;
@@ -247,7 +251,7 @@ class SahkonHintaCard extends HTMLElement {
         <div class="tabs" role="tablist" aria-label="Päivä">
           <button role="tab" data-day="today" aria-selected="${this._day === "today"}">Tänään</button>
           <button role="tab" data-day="tomorrow" aria-selected="${this._day === "tomorrow"}"
-            ${hasTomorrow ? "" : "disabled title='Huomisen hinnat tulevat noin klo 14'"}>Huomenna</button>
+            class="${hasTomorrow ? "" : "pending"}">Huomenna</button>
         </div>
       </div>
       <div class="now">
@@ -653,7 +657,7 @@ class SahkonHintaCard extends HTMLElement {
       .tabs { display: inline-flex; border: 1px solid var(--shn-line); border-radius: 999px; padding: 2px; }
       .tabs button { font-size: .8rem; border: 0; background: none; cursor: pointer; color: var(--secondary-text-color); padding: 4px 12px; border-radius: 999px; }
       .tabs button[aria-selected="true"] { background: var(--primary-color); color: var(--text-primary-color, #fff); }
-      .tabs button:disabled { opacity: .4; cursor: default; }
+      .tabs button.pending:not([aria-selected="true"]) { opacity: .55; }
       .now { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; margin: 14px 0 2px; }
       .price { color: color-mix(in srgb, var(--c) 78%, var(--primary-text-color)); font-size: 3rem; font-weight: 300; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
       .unit { color: var(--secondary-text-color); font-size: .95rem; }

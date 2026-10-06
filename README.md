@@ -102,6 +102,7 @@ entity: sensor.sahkon_hinta_nyt
 # name: Sähkön hinta nyt
 # thresholds: [5, 10, 15]   # cheap / normal / expensive limits in snt/kWh
 # show_source: true
+# time_zone: Europe/Helsinki # times are shown in Finnish time by default
 # show_actions: true        # alert / control / scene buttons
 ```
 
