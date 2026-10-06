@@ -23,7 +23,24 @@ Plus two blueprints:
 
 ## Installation
 
-### 1. Add the package
+### 1. Add the sensors
+
+#### Option A: HACS (recommended, no YAML)
+
+[![Open your Home Assistant instance and open this repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=sahkonhintanyt-ha&repository=sahkon-hinta-nyt-ha&category=integration)
+
+1. Click the button above, or in HACS open ⋮ → **Custom repositories**, add
+   `https://github.com/sahkonhintanyt-ha/sahkon-hinta-nyt-ha` with type **Integration**.
+2. Download **Sähkön hinta nyt** and restart Home Assistant.
+3. Add the integration:
+
+[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=sahkon_hinta_nyt)
+
+   or Settings → Devices & services → **Add integration** → "Sähkön hinta nyt".
+   Choose how many cheap hours per day you want (default 4). You can change it
+   later from the integration's **Configure** button.
+
+#### Option B: YAML package
 
 In `configuration.yaml`, enable packages (if you haven't already):
 
@@ -34,9 +51,9 @@ homeassistant:
 
 Copy [`packages/sahkon_hinta_nyt.yaml`](packages/sahkon_hinta_nyt.yaml) into
 your `config/packages/` folder and restart Home Assistant.
+Want a different number of cheap hours? Change `hours=4` in the URL.
 
-Want a different number of cheap hours? Change `hours=4` in the URL
-(for example `hours=6`).
+Use **either** A or B, not both – they create the same entities.
 
 ### 2. Import the blueprints
 
@@ -65,6 +82,11 @@ Right from the card (admin users) you can also:
 Everything the card creates is a normal Home Assistant automation or scene
 (marked with ⚡), so you can edit it later in Settings. The card lists them and
 lets you switch them on/off or delete them.
+
+**Easiest:** install the card from HACS – see
+[sahkon-hinta-card](https://github.com/sahkonhintanyt-ha/sahkon-hinta-card).
+
+Manual install:
 
 1. Download [`dist/sahkon-hinta-card.js`](dist/sahkon-hinta-card.js) and copy it to
    `config/www/sahkon-hinta-card.js`.
@@ -130,8 +152,10 @@ If you show the prices publicly, please credit the source with a link to
 Pörssisähkön hinta Home Assistantiin: hinta nyt, päivän halvimmat tunnit,
 huomisen hinnat ja valmiit automaatiot. Ei lisäosia, ei API-avainta.
 
-1. Lisää `configuration.yaml`-tiedostoon `packages: !include_dir_named packages`
-   (ks. yllä) ja kopioi `packages/sahkon_hinta_nyt.yaml` kansioon `config/packages/`.
+1. Helpoin tapa: lisää tämä repositorio HACSiin (Custom repositories, tyyppi
+   **Integration**), lataa **Sähkön hinta nyt**, käynnistä Home Assistant
+   uudelleen ja lisää integraatio: Asetukset → Laitteet ja palvelut → Lisää integraatio.
+   Vaihtoehtoisesti voit käyttää YAML-pakettia (ks. yllä).
 2. Käynnistä Home Assistant uudelleen.
 3. Tuo blueprintit yllä olevilla painikkeilla.
 4. Halutessasi lisää hintakortti: kopioi `dist/sahkon-hinta-card.js` kansioon `config/www/`, lisää resurssi `/local/sahkon-hinta-card.js` (JavaScript-moduuli) ja käytä korttia `type: custom:sahkon-hinta-card`.

@@ -1,0 +1,32 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sähkön hinta nyt",
+        "description": "Pörssisähkön hinta palvelusta sähkönhintanyt.org. Maksuton, ei API-avainta.",
+        "data": {
+          "cheap_hours": "Halpojen tuntien määrä vuorokaudessa"
+        },
+        "data_description": {
+          "cheap_hours": "binary_sensor.sahko_halpaa on päällä näin monena vuorokauden halvimpana tuntina."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Hintapalveluun ei saatu yhteyttä. Tarkista internetyhteys ja yritä uudelleen."
+    },
+    "abort": {
+      "already_configured": "Sähkön hinta nyt on jo asennettu."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Sähkön hinta nyt",
+        "data": {
+          "cheap_hours": "Halpojen tuntien määrä vuorokaudessa"
+        }
+      }
+    }
+  }
+}
