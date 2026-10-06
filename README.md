@@ -46,7 +46,44 @@ Cheapest hours → turn on device
 [![Import: price alert](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fsahkonhintanyt-ha%2Fsahkon-hinta-nyt-ha%2Fblob%2Fmain%2Fblueprints%2Fautomation%2Fsahkon-hinta-nyt%2Fprice_alert.yaml)
 Price alert
 
-### 3. Optional: price chart
+### 3. Optional: price card
+
+![Sähkön hinta card](images/card-preview.png)
+
+A ready-made Lovelace card: current price, price level, today's and tomorrow's
+prices as a bar chart (negative prices hang below the zero line), cheapest
+3-hour window, and lowest / average / highest price.
+
+Right from the card (admin users) you can also:
+
+- **Ilmoitus** – create a price alert (below / above a limit, or when tomorrow's
+  prices are published) to your phone or Home Assistant notifications
+- **Ohjaus** – run a device or a scene during the cheapest hours, or whenever the
+  price is below your limit
+- **Scene** – save the current state of chosen devices as a scene
+
+Everything the card creates is a normal Home Assistant automation or scene
+(marked with ⚡), so you can edit it later in Settings. The card lists them and
+lets you switch them on/off or delete them.
+
+1. Download [`dist/sahkon-hinta-card.js`](dist/sahkon-hinta-card.js) and copy it to
+   `config/www/sahkon-hinta-card.js`.
+2. Settings → Dashboards → ⋮ → **Resources** → **Add resource**:
+   URL `/local/sahkon-hinta-card.js`, type **JavaScript module**.
+   (Resources is visible when *Advanced mode* is on in your user profile.)
+3. Refresh the browser, then add the card:
+
+```yaml
+type: custom:sahkon-hinta-card
+entity: sensor.sahkon_hinta_nyt
+# optional:
+# name: Sähkön hinta nyt
+# thresholds: [5, 10, 15]   # cheap / normal / expensive limits in snt/kWh
+# show_source: true
+# show_actions: true        # alert / control / scene buttons
+```
+
+### 4. Optional: ApexCharts chart
 
 Needs [apexcharts-card](https://github.com/RomRider/apexcharts-card) from HACS.
 
@@ -97,6 +134,7 @@ huomisen hinnat ja valmiit automaatiot. Ei lisäosia, ei API-avainta.
    (ks. yllä) ja kopioi `packages/sahkon_hinta_nyt.yaml` kansioon `config/packages/`.
 2. Käynnistä Home Assistant uudelleen.
 3. Tuo blueprintit yllä olevilla painikkeilla.
+4. Halutessasi lisää hintakortti: kopioi `dist/sahkon-hinta-card.js` kansioon `config/www/`, lisää resurssi `/local/sahkon-hinta-card.js` (JavaScript-moduuli) ja käytä korttia `type: custom:sahkon-hinta-card`.
 
 Uudet anturit: `sensor.sahkon_hinta_nyt` ja `binary_sensor.sahko_halpaa`
 (päällä vuorokauden neljänä halvimpana tuntina).
