@@ -47,7 +47,7 @@ class SahkonHintaCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             async with self._session.get(
                 f"{API_BASE}/{path}",
                 params=params,
-                headers={"User-Agent": "HomeAssistant-sahkon_hinta_nyt/1.0"},
+                headers={"User-Agent": "HomeAssistant-sahkon_hinta_nyt/1.2"},
             ) as resp:
                 resp.raise_for_status()
                 return await resp.json(content_type=None)
