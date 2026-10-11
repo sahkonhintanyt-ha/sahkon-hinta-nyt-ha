@@ -2,7 +2,8 @@
 
 Finnish spot electricity price (pörssisähkö) in Home Assistant: current price,
 cheapest hours, tomorrow's prices and ready-made automations.
-No custom integration, no API key, no registration.
+Install it from HACS as a custom integration – or use the plain YAML package.
+No API key, no registration.
 
 Data: **[Sähkön hinta nyt – sähkönhintanyt.org](https://sähkönhintanyt.org/)**
 (ENTSO-E / Nord Pool day-ahead, 15-minute resolution, VAT 25.5 % included).
@@ -151,7 +152,8 @@ If you show the prices publicly, please credit the source with a link to
 ## Suomeksi
 
 Pörssisähkön hinta Home Assistantiin: hinta nyt, päivän halvimmat tunnit,
-huomisen hinnat ja valmiit automaatiot. Ei lisäosia, ei API-avainta.
+huomisen hinnat ja valmiit automaatiot. Asennus HACSista integraationa tai
+YAML-pakettina. Ei API-avainta, ei rekisteröitymistä.
 
 1. Helpoin tapa: lisää tämä repositorio HACSiin (Custom repositories, tyyppi
    **Integration**), lataa **Sähkön hinta nyt**, käynnistä Home Assistant
@@ -166,6 +168,14 @@ Uudet anturit: `sensor.sahkon_hinta_nyt` ja `binary_sensor.sahko_halpaa`
 
 Tarkempi ohje ja vastaukset yleisiin kysymyksiin:
 **[Sähkön hinta nyt – Home Assistant -ohje](https://sähkönhintanyt.org/integraatiot/home-assistant/)**
+
+## Prices on the web / Hinnat verkossa
+
+- [Sähkön hinta tänään](https://sähkönhintanyt.org/sahkon-hinta-tanaan/) – today's prices hour by hour
+- [Sähkön hinta huomenna](https://sähkönhintanyt.org/sahkon-hinta-huomenna/) – tomorrow's prices (published around 14:15 Finnish time)
+- [Sähkön keskihinta](https://sähkönhintanyt.org/sahkon-keskihinta/) – monthly averages
+- [Sähkön siirtohinnat](https://sähkönhintanyt.org/sahkon-siirtohinta/) – network transfer prices
+- [Sähköyhtiöt](https://sähkönhintanyt.org/sahkoyhtiot/) – contract and margin comparison
 
 ## License
 
