@@ -14,3 +14,6 @@ DEFAULT_CHEAP_HOURS = 4
 
 UPDATE_INTERVAL = timedelta(minutes=5)
 ATTRIBUTION = "Data: sähkönhintanyt.org (ENTSO-E / Nord Pool day-ahead)"
+
+CARD_FILENAME = "sahkon-hinta-card.js"
+CARD_URL_BASE = f"/{DOMAIN}"
