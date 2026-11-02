@@ -2,7 +2,7 @@
 
 Finnish spot electricity price (pörssisähkö) in Home Assistant: current price,
 cheapest hours, tomorrow's prices and ready-made automations.
-Install it from HACS as a custom integration – or use the plain YAML package.
+Install it from HACS (search for "Sähkön hinta nyt") – or use the plain YAML package.
 No API key, no registration.
 
 Data: **[Sähkön hinta nyt – sähkönhintanyt.org](https://sähkönhintanyt.org/)**
@@ -30,9 +30,8 @@ Plus two blueprints:
 
 [![Open your Home Assistant instance and open this repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=sahkonhintanyt-ha&repository=sahkon-hinta-nyt-ha&category=integration)
 
-1. Click the button above, or in HACS open ⋮ → **Custom repositories**, add
-   `https://github.com/sahkonhintanyt-ha/sahkon-hinta-nyt-ha` with type **Integration**.
-2. Download **Sähkön hinta nyt** and restart Home Assistant.
+1. Open HACS, search for **Sähkön hinta nyt** and open it (or click the button above).
+2. Click **Download** and restart Home Assistant.
 3. Add the integration:
 
 [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=sahkon_hinta_nyt)
@@ -40,6 +39,10 @@ Plus two blueprints:
    or Settings → Devices & services → **Add integration** → "Sähkön hinta nyt".
    Choose how many cheap hours per day you want (default 4). You can change it
    later from the integration's **Configure** button.
+
+   Not showing up in the HACS search? Add it as a custom repository instead:
+   HACS → ⋮ → **Custom repositories** → `https://github.com/sahkonhintanyt-ha/sahkon-hinta-nyt-ha`,
+   type **Integration**.
 
 #### Option B: YAML package
 
@@ -150,11 +153,12 @@ Pörssisähkön hinta Home Assistantiin: hinta nyt, päivän halvimmat tunnit,
 huomisen hinnat ja valmiit automaatiot. Asennus HACSista integraationa tai
 YAML-pakettina. Ei API-avainta, ei rekisteröitymistä.
 
-1. Helpoin tapa: lisää tämä repositorio HACSiin (Custom repositories, tyyppi
-   **Integration**), lataa **Sähkön hinta nyt**, käynnistä Home Assistant
-   uudelleen ja lisää integraatio: Asetukset → Laitteet ja palvelut → Lisää integraatio.
+1. Helpoin tapa: avaa HACS, hae **Sähkön hinta nyt** ja valitse **Download**.
    Vaihtoehtoisesti voit käyttää YAML-pakettia (ks. yllä).
-2. Käynnistä Home Assistant uudelleen.
+2. Käynnistä Home Assistant uudelleen ja lisää integraatio: Asetukset → Laitteet ja
+   palvelut → Lisää integraatio → Sähkön hinta nyt.
+   Jos integraatio ei löydy hausta, lisää se HACSiin kohdasta ⋮ → **Custom repositories**
+   (osoite yllä, tyyppi **Integration**).
 3. Tuo blueprintit yllä olevilla painikkeilla.
 4. Hintakortti asentuu integraation mukana: päivitä selain ja lisää kojelautaan kortti **Sähkön hinta** (`type: custom:sahkon-hinta-card`).
 
